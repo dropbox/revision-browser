@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
-{% if current_user.is_authenticated %}
+{% if session.get('access_token') %}
 <div id="dbx-chooser-container"></div>
 <div>
 	<a href="{{ url_for('logout') }}">Logout</a>
