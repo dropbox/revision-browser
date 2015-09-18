@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Steins;Box</title>
+	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="lzmguwvgdjneb8l"></script>
+</head>
+<body>
+
+{% if current_user.is_authenticated %}
+<div id="dbx-chooser-container"></div>
+<div>
+	<a href="{{ url_for('logout') }}">Logout</a>
+</div>
+<script type="text/javascript">
+options = {
+	success: function(files) {
+		console.log(files);
+	}
+}
+var button = Dropbox.createChooseButton();
+document.getElementById('dbx-chooser-container').appendChild(button);
+</script>
+
+{% else %}
+<div>
+	<a href="{{ url_for('login') }}">Login</a>
+</div>
+{% endif %}
+
+</body>
+</html>
