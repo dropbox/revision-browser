@@ -1,3 +1,4 @@
 flask
-dropbox
+git+https://github.com/smarx/dropbox-sdk-python.git
+gunicorn
 requests
