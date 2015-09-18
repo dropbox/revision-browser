@@ -1,4 +1,4 @@
-import datetime
+from functools import wraps
 import os
 import urlparse
 import requests
@@ -35,6 +35,15 @@ def get_dropbox_auth_flow():
     return DropboxOAuth2Flow(APP_KEY, APP_SECRET, get_url('oauth_callback'),
                              session, 'dropbox-csrf-token')
 
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if 'access_token' not in session:
+            return redirect(get_flow().start())
+        else:
+            return f(*args, **kwargs)
+    return decorated
+
 @app.route("/login")
 def login():
 	return redirect(get_dropbox_auth_flow().start())
@@ -47,10 +56,8 @@ def oauth_callback():
     return redirect(url_for('index'))
 
 @app.route('/logout')
+@requires_auth
 def logout():
-	if session.get('access_token'):
-		requests.post('https://api.dropboxapi.com/1/disable_access_token',
-			headers={'Authorization': 'Bearer ' + session['access_token']})
 	session.clear()
 	return redirect(url_for('index'))
 
@@ -59,6 +66,7 @@ def index():
 	return render_template('index.html')
 
 @app.route('/revisions')
+@requires_auth
 def revisions():
 	# Shared Link from Dropbox Chooser
 	link = request.args['link']
@@ -68,13 +76,17 @@ def revisions():
 		headers={'Authorization': 'Bearer ' + str(session['access_token'])}).json()
 
 	# Calling Dropbox API v2
-	dbx = Dropbox(session['access_token'])
-	entries = dbx.files_list_revisions(metadata['path']).entries
+	if not metadata.get('path'):
+		return redirect(url_for('index'))
+	else:
+		dbx = Dropbox(session['access_token'])
+		entries = dbx.files_list_revisions(metadata['path']).entries
 
-	return render_template('revisions.html', path=metadata['path'],
-		revisions=entries)
+		return render_template('revisions.html', path=metadata['path'],
+			revisions=entries)
 
 @app.route('/revision')
+@requires_auth
 def revision():
 	dbx = Dropbox(session['access_token'])
 
