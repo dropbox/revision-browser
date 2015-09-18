@@ -1,7 +1,5 @@
-# To run
-source .env; python app.py
+# Dropbox Python SDK
+pip install git+https://github.com/smarx/dropbox-sdk-python.git
 
-Chooser for picking the file to go back on.
-/metadata/link to find out where the file is.
-List revisions
-Download revisions
+# To Run
+python app.py

@@ -6,20 +6,22 @@
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
+
 {% if session.get('access_token') %}
-<div id="dbx-chooser-container"></div>
-<div>
-	<a href="{{ url_for('logout') }}">Logout</a>
-</div>
-<script type="text/javascript">
-options = {
-	success: function(files) {
-		window.location = "/revisions?link=" + files[0].link;
+	<div id="dbx-chooser-container"></div>
+	<div>
+		<a href="{{ url_for('logout') }}">Logout</a>
+	</div>
+
+	<script type="text/javascript">
+	options = {
+		success: function(files) {
+			window.location = "/revisions?link=" + files[0].link;
+		}
 	}
-}
-var button = Dropbox.createChooseButton(options);
-document.getElementById('dbx-chooser-container').appendChild(button);
-</script>
+	var button = Dropbox.createChooseButton(options);
+	document.getElementById('dbx-chooser-container').appendChild(button);
+	</script>
 {% else %}
 <div>
 	<a href="{{ url_for('login') }}">Login</a>

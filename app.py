@@ -60,25 +60,28 @@ def index():
 
 @app.route('/revisions')
 def revisions():
+	# Shared Link from Dropbox Chooser
 	link = request.args['link']
+
+	# Calling Dropbox API v1
 	metadata = requests.post('https://api.dropbox.com/1/metadata/link', params={'link': link},
 		headers={'Authorization': 'Bearer ' + str(session['access_token'])}).json()
-	dbx = Dropbox(session['access_token'])
-	revisions_result = dbx.files_list_revisions(metadata['path'])
 
-	if not revisions_result.is_deleted:
-		return render_template('revisions.html', path=metadata['path'],
-			revisions=revisions_result.entries)
-	else:
-		redirect(url_for('index'))
+	# Calling Dropbox API v2
+	dbx = Dropbox(session['access_token'])
+	entries = dbx.files_list_revisions(metadata['path']).entries
+
+	return render_template('revisions.html', path=metadata['path'],
+		revisions=entries)
 
 @app.route('/revision')
 def revision():
 	dbx = Dropbox(session['access_token'])
-	f = dbx.files_download(request.args['path'], request.args['rev'])
 
+	f = dbx.files_download(request.args['path'], request.args['rev'])
 	resp = make_response(f[1].content)
 	resp.headers["Content-Disposition"] = "attachment; filename=" + f[0].name
+
 	return resp
 
 if __name__ == "__main__":
