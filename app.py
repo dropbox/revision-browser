@@ -1,11 +1,13 @@
 import datetime
 import os
 import urlparse
+import requests
 
 from dropbox import Dropbox
 from dropbox.oauth import DropboxOAuth2Flow
 from flask import (
 	Flask,
+	make_response,
 	redirect,
 	render_template,
 	request,
@@ -98,28 +100,24 @@ def index():
 @app.route('/revisions')
 @login_required
 def revisions():
-	link = request.args['shared_link']
-	revisions = [
-		{
-			'name': 'sample.txt',
-			'path_lower': '/Documents.sample.txt',
-			'rev': '1',
-			'size': 4.1,
-			'client_modified': datetime.datetime.now() - datetime.timedelta(2)
-		},
-		{
-			'name': 'sample.txt',
-			'path_lower': '/Documents.sample.txt',
-			'rev': '2',
-			'size': '9.1',
-			'client_modified': datetime.datetime.now() - datetime.timedelta(1)
-		}
-	]
-	return render_template('revisions.html', filename="sample.txt", revisions=revisions)
+	link = request.args['link']
+	metadata = requests.post('https://api.dropbox.com/1/metadata/link', params={'link': link},
+		headers={'Authorization': 'Bearer ' + str(current_user.access_token)}).json()
+	dbx = Dropbox(current_user.access_token)
+	revisions_result = dbx.files_list_revisions(metadata['path'])
+	if not revisions_result.is_deleted:
+		return render_template('revisions.html', path=metadata['path'], revisions=revisions_result.entries)
+	else:
+		redirect(url_for('index'))
 
 @app.route('/revision')
+@login_required
 def revision():
-	return request.args['rev']
+	dbx = Dropbox(current_user.access_token)
+	f = dbx.files_download(request.args['path'], request.args['rev'])
+	resp = make_response(f[1].content)
+	resp.headers["Content-Disposition"] = "attachment; filename=" + f[0].name
+	return resp
 
 if __name__ == "__main__":
     app.run()

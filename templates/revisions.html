@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>{{ filename }}</title>
+	<title>Revisions</title>
+	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
 {% for revision in revisions %}
 <div>
-	{{ revision.rev }}
+	<a href="/revision?rev={{ revision.rev }}&path={{ path }}">{{ revision.client_modified.strftime("%Y-%m-%d %H:%M:%S") }}</a>
 </div>
 {% endfor %}
 </div>
