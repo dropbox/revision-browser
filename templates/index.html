@@ -6,12 +6,17 @@
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
-
-{% if session.get('access_token') %}
-	<div id="dbx-chooser-container"></div>
-	<div>
-		<a href="{{ url_for('logout') }}">Logout</a>
-	</div>
+<h1>Revision Browser</h1>
+<div class="main">
+	<div class="main-inner">
+	{% if session.get('access_token') %}
+		<div>Choose a file from your Dropbox.</div>
+		<br>
+		<div id="dbx-chooser-container"></div>
+		<br>
+		<div>
+			<a href="{{ url_for('logout') }}">Logout</a>
+		</div>
 
 	<script type="text/javascript">
 	options = {
@@ -22,10 +27,10 @@
 	var button = Dropbox.createChooseButton(options);
 	document.getElementById('dbx-chooser-container').appendChild(button);
 	</script>
-{% else %}
-<div>
-	<a href="{{ url_for('login') }}">Login</a>
+	{% else %}
+		<a href="{{ url_for('login') }}">Login</a>
+	{% endif %}
+	</div>
 </div>
-{% endif %}
 </body>
 </html>

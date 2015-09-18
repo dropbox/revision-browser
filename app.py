@@ -80,9 +80,9 @@ def revisions():
 		return redirect(url_for('index'))
 	else:
 		dbx = Dropbox(session['access_token'])
-		entries = dbx.files_list_revisions(metadata['path']).entries
-
-		return render_template('revisions.html', path=metadata['path'],
+		entries = sorted(dbx.files_list_revisions(metadata['path']).entries, key=lambda entry: entry.client_modified)
+		entries.reverse()
+		return render_template('revisions.html', path=metadata['path'], filename=os.path.split(metadata['path'])[1],
 			revisions=entries)
 
 @app.route('/revision')

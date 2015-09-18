@@ -5,11 +5,16 @@
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
-{% for revision in revisions %}
-<div>
-	<a href="/revision?rev={{ revision.rev }}&path={{ path }}">{{ revision.client_modified.strftime("%Y-%m-%d %H:%M:%S") }}</a>
+<h1>{{ filename }}</h1>
+<div class="revisions-list-container">
+	<ol class="revisions-list">
+	{% for revision in revisions %}
+	<li>
+		<a href="/revision?rev={{ revision.rev }}&path={{ path }}">{{ revision.client_modified.strftime("%Y-%m-%d %H:%M:%S") }}</a>
+	</li>
+	{% endfor %}
+	</ol>
 </div>
-{% endfor %}
 </div>
 </body>
 </html>

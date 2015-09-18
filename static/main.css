@@ -44,3 +44,22 @@ a.button:active {
 }
 a.button:active:after { content: ""; width: 100%; height: 3px; background: #fff; position: absolute; bottom: -1px; left: 0; }
 p { font-size: 18px; margin: 50px 0; }
+.revisions-list-container {
+    width: 100%;
+}
+
+.revisions-list {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main {
+    width: 100%;
+}
+
+.main-inner {
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
