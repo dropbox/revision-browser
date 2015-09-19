@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Revisions</title>
+	<title>{{ filename }}</title>
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
 <h1>{{ filename }}</h1>
 <div class="revisions-list-container">
-	<ol class="revisions-list">
-	{% for revision in revisions %}
-	<li>
-		<a href="/revision?rev={{ revision.rev }}&path={{ path }}">{{ revision.client_modified.strftime("%Y-%m-%d %H:%M:%S") }}</a>
-	</li>
-	{% endfor %}
-	</ol>
-</div>
+	<div class="revisions-list">
+		<ol>
+		{% for revision in revisions %}
+		<li>
+			<a href="/revision?rev={{ revision.rev }}&path={{ path }}">{{ revision.client_modified.strftime("%Y-%m-%d %H:%M:%S") }}</a>
+		</li>
+		{% endfor %}
+		</ol>
+		<br>
+		<a href="{{ url_for('index') }}">Back</a>
+	</div>
 </div>
 </body>
 </html>
