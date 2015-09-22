@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Revision Browser</title>
-	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="lzmguwvgdjneb8l"></script>
+	<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="{{ app_key }}"></script>
 	<link rel="stylesheet" type="text/css" href="/static/main.css">
 </head>
 <body>
@@ -21,7 +21,7 @@
 	<script type="text/javascript">
 	options = {
 		success: function(files) {
-			window.location = "/revisions?link=" + files[0].link;
+			window.location = "/revisions?link=" + encodeURIComponent(files[0].link);
 		}
 	}
 	var button = Dropbox.createChooseButton(options);

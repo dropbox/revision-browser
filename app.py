@@ -63,7 +63,7 @@ def logout():
 
 @app.route("/")
 def index():
-	return render_template('index.html')
+	return render_template('index.html', app_key=APP_KEY)
 
 @app.route('/revisions')
 @requires_auth
