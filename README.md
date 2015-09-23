@@ -1,8 +1,5 @@
 # Revision Browser for Dropbox Files
 
-## To Run Locally
-source .env; python app.py
-
 ## Running the sample yourself
 
 This sample was built with Heroku in mind as a target, so the simplest way to run the sample is via `foreman`:
